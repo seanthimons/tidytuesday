@@ -4,9 +4,9 @@
   list.of.packages <- c(
     'here',
     'rio',
+    'arrow',
     'tidyverse',
     'janitor',
-    'feather',
     'esquisse',
     'skimr',
     'timetk',
@@ -266,7 +266,7 @@ for (col in colnames(weather_numeric)[1:5]) {
 ### Water Quality ----
 if ("date" %in% colnames(water_quality)) {
   water_quality %>%
-    ggplot(aes(x = date, y = some_numeric_variable)) +
+    ggplot(aes(x = date, y = enterococci_cfu_100ml)) +
     geom_line() +
     labs(title = "Time Series Plot (Water Quality)")
 }
@@ -274,7 +274,7 @@ if ("date" %in% colnames(water_quality)) {
 ### Weather ----
 if ("date" %in% colnames(weather)) {
   weather %>%
-    ggplot(aes(x = date, y = some_numeric_variable)) +
+    ggplot(aes(x = date, y = max_temp_C)) +
     geom_line() +
     labs(title = "Time Series Plot (Weather)")
 }
