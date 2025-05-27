@@ -1,4 +1,5 @@
 # packages ---------------------------------------------------------------
+# packages ---------------------------------------------------------------
 
 {
   list.of.packages <- c(
@@ -43,7 +44,6 @@
     numeric = sfl(n = length, median = ~ median(.x, na.rm = T))
   )
 }
-
 
 # raw --------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ print(sapply(weather, class))
 
 ### Unique Value Distributions ###
 print("Weather Data - Unique Value Distributions (first 10 columns):")
-for (col in colnames(weather)[1:ncol(weather)]) {
+for (col in colnames(weather)[1:10]) {
   print(paste("Column:", col))
   print(unique(weather[[col]]))
 }
