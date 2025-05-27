@@ -1,5 +1,4 @@
 # packages ---------------------------------------------------------------
-# packages ---------------------------------------------------------------
 
 {
   list.of.packages <- c(
@@ -13,6 +12,7 @@
     'timetk',
     'sf', #if plotting
     'mapview', # if plotting
+    'mapgl',
     'toxpiR'
   )
 
@@ -56,43 +56,40 @@
   rm(tuesdata)
 }
 
-
-# explore ----------------------------------------------------------------
-
 # Data Overview ----------------------------------------------------------
 
-## Water Quality Data ##
+## Water Quality Data ----
 
-### Basic Statistics ###
+### Basic Statistics ----
 print("Water Quality Data - Basic Statistics:")
-print(summary(water_quality))
+print(skimr::skim(water_quality))
 
-### Missing Values and Data Types ###
+### Missing Values and Data Types ----
 print("Water Quality Data - Missing Values:")
 print(sapply(water_quality, function(x) sum(is.na(x))))
 print("Water Quality Data - Data Types:")
 print(sapply(water_quality, class))
 
-### Unique Value Distributions ###
+### Unique Value Distributions ----
 print("Water Quality Data - Unique Value Distributions (first 10 columns):")
 for (col in colnames(water_quality)[1:10]) {
   print(paste("Column:", col))
   print(unique(water_quality[[col]]))
 }
 
-## Weather Data ##
+## Weather Data ----
 
-### Basic Statistics ###
+### Basic Statistics ----
 print("Weather Data - Basic Statistics:")
-print(summary(weather))
+print(skimr::skim(weather))
 
-### Missing Values and Data Types ###
+### Missing Values and Data Types ----
 print("Weather Data - Missing Values:")
 print(sapply(weather, function(x) sum(is.na(x))))
-print("Weather Data - Data Types:")
+print("Water Quality Data - Data Types:")
 print(sapply(weather, class))
 
-### Unique Value Distributions ###
+### Unique Value Distributions ----
 print("Weather Data - Unique Value Distributions (first 10 columns):")
 for (col in colnames(weather)[1:10]) {
   print(paste("Column:", col))
@@ -136,9 +133,9 @@ weather %>%
   labs(title = "Boxplots of Numerical Variables (Weather)")
 
 
-## Categorical Variables - Bar Charts ##
+## Categorical Variables - Bar Charts ----
 
-### Water Quality ###
+### Water Quality ----
 water_quality %>%
   select(where(is.character)) %>%
   pivot_longer(everything(), names_to = "variable", values_to = "value") %>%
@@ -150,7 +147,7 @@ water_quality %>%
   labs(title = "Bar Charts of Categorical Variables (Water Quality)") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-### Weather ###
+### Weather ----
 weather %>%
   select(where(is.character)) %>%
   pivot_longer(everything(), names_to = "variable", values_to = "value") %>%
@@ -162,7 +159,7 @@ weather %>%
   labs(title = "Bar Charts of Categorical Variables (Weather)") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-## Relationships - Correlation Matrix ##
+## Relationships - Correlation Matrix ----
 
 ### Water Quality ###
 water_quality_numeric <- water_quality %>% select(where(is.numeric))
@@ -179,6 +176,28 @@ cor_weather_df <- as.data.frame(cor_matrix_weather)
 
 print("Weather - Correlation Matrix")
 print(cor_weather_df)
+
+# Spatial Analysis (if applicable) ----------------------------------------
+
+## Spatial Plotting - Simple Example (if applicable) ##
+
+### Water Quality ###
+
+water_quality %>%
+  select(
+    swim_site,
+    longitude,
+    latitude
+  ) %>%
+  distinct() %>%
+  sf::st_as_sf(., coords = c('longitude', 'latitude'), crs = 4391) %>%
+  #sf::st_is_valid()
+  mapgl::maplibre()
+
+### Weather ###
+#if(sf::st_is_sf(weather)){
+#  mapview::mapview(weather)
+#}
 
 # Quality Assessment -------------------------------------------------------
 
@@ -224,6 +243,47 @@ for (col in colnames(weather_numeric)[1:5]) {
   ))
 }
 
+# Temporal Patterns (if applicable) -------------------------------------
+
+## Time Series Analysis (example assuming a 'date' column exists) ##
+
+### Water Quality ----
+if ("date" %in% colnames(water_quality)) {
+  water_quality %>%
+    ggplot(aes(x = date, y = some_numeric_variable)) +
+    geom_line() +
+    labs(title = "Time Series Plot (Water Quality)")
+}
+
+### Weather ----
+if ("date" %in% colnames(weather)) {
+  weather %>%
+    ggplot(aes(x = date, y = some_numeric_variable)) +
+    geom_line() +
+    labs(title = "Time Series Plot (Weather)")
+}
+
+# Insights & Documentation -------------------------------------------------
+
+## Key Findings Summary ----
+print(
+  "Key Findings: [To be completed after reviewing the above outputs and plots]"
+)
+
+## Data Quality Issues ----
+print(
+  "Data Quality Issues: [To be completed after reviewing the above outputs]"
+)
+
+## Variable Relationships ----
+print(
+  "Variable Relationships: [To be completed after reviewing the correlation matrices and plots]"
+)
+
+## Next Steps Recommendations ----
+print(
+  "Next Steps: [To be completed based on the above findings, could include data cleaning, feature engineering, modeling, etc.]"
+)
 
 # Insights & Documentation -------------------------------------------------
 
