@@ -179,25 +179,41 @@ print(cor_weather_df)
 
 # Spatial Analysis (if applicable) ----------------------------------------
 
-## Spatial Plotting - Simple Example (if applicable) ##
+### Water Quality ----
 
-### Water Quality ###
-
-water_quality %>%
+wq_sf <- water_quality %>%
+  #glimpse()
   select(
+    council,
     swim_site,
     longitude,
     latitude
   ) %>%
   distinct() %>%
-  sf::st_as_sf(., coords = c('longitude', 'latitude'), crs = 4391) %>%
-  #sf::st_is_valid()
-  mapgl::maplibre()
+  st_as_sf(., coords = c("longitude", "latitude"), crs = 4326)
 
-### Weather ###
-#if(sf::st_is_sf(weather)){
-#  mapview::mapview(weather)
-#}
+#sf::st_is_valid(wq_sf)
+
+mapview(wq_sf, zcol = 'council', burst = TRUE, legend = FALSE)
+
+# maplibre(
+#   bounds = wq_sf
+# ) %>%
+#   add_circle_layer(
+#     .,
+#     id = "poi-layer",
+#     source = wq_sf,
+#     # circle_color = match_expr(
+#     #   'category',
+#     #   values = wq_sf$swim_site,
+#     #   stops = randomcoloR::distinctColorPalette(k = length(unique(water_quality$swim_site)))
+#     # ),
+#     cluster_options = cluster_options(),
+#     hover_options = list(
+#       circle_radius = 12,
+#       circle_color = "#ffff99"
+#     )
+#   )
 
 # Quality Assessment -------------------------------------------------------
 
@@ -281,28 +297,6 @@ print(
 )
 
 ## Next Steps Recommendations ----
-print(
-  "Next Steps: [To be completed based on the above findings, could include data cleaning, feature engineering, modeling, etc.]"
-)
-
-# Insights & Documentation -------------------------------------------------
-
-## Key Findings Summary ##
-print(
-  "Key Findings: [To be completed after reviewing the above outputs and plots]"
-)
-
-## Data Quality Issues ##
-print(
-  "Data Quality Issues: [To be completed after reviewing the above outputs]"
-)
-
-## Variable Relationships ##
-print(
-  "Variable Relationships: [To be completed after reviewing the correlation matrices and plots]"
-)
-
-## Next Steps Recommendations ##
 print(
   "Next Steps: [To be completed based on the above findings, could include data cleaning, feature engineering, modeling, etc.]"
 )
